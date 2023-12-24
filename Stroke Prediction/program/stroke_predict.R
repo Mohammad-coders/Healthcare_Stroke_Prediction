@@ -185,7 +185,7 @@ recall_matrix<- confusion_matrix[2,2]/sum(confusion_matrix[2,])
 
 precision_matrix<- confusion_matrix[2,2]/sum(confusion_matrix[,2])
 
-f_measure <- 2 * (precision_matrix_second_class * recall_matrix_second_class) / (precision_matrix_second_class + recall_matrix_second_class)
+f_measure <- 2 * (precision_matrix * recall_matrix) / (precision_matrix + recall_matrix)
 
 cat("Confusion Matrix: ",confusion_matrix,"\n")
 cat("Recall: ",recall_matrix_second_class,"\n")
