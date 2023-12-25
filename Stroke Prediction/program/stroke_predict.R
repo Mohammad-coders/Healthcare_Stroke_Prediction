@@ -1,5 +1,6 @@
 library(readxl)
 library(dplyr)
+library(caret)
 library(e1071)
 
 stroke<- read_excel("E:/AIUB/9th semester/Data Science/Final/Dataset/healthcare-dataset-stroke-data.xlsx")
@@ -10,17 +11,15 @@ summary(stroke)
 
 str(stroke)
 
-stroke$bmi[stroke$bmi=="N/A"]<- NA
-colSums(is.na(stroke))
+stroke$hypertension<-as.factor(stroke$hypertension)
+stroke$heart_disease<-as.factor(stroke$heart_disease)
+stroke$stroke<-as.factor(stroke$stroke)
 stroke$bmi<- as.integer(stroke$bmi)
-
-str(stroke)
-
-
-
+colSums(is.na(stroke))
 stroke$bmi[is.na(stroke$bmi)] <- mean(stroke$bmi, na.rm = TRUE)
 
 colSums(is.na(stroke))
+str(stroke)
 
 boxplot(stroke$bmi,main="Outlier BMI")
 
@@ -56,11 +55,6 @@ stroke$avg_glucose_level[is.na(stroke$avg_glucose_level)]<-mean(stroke$avg_gluco
 colSums(is.na(stroke))
 boxplot(stroke$avg_glucose_level,main="Remove Outlier Avg Glucose level")
 
-
-str(stroke)
-stroke$hypertension<-as.factor(stroke$hypertension)
-stroke$heart_disease<-as.factor(stroke$heart_disease)
-str(stroke)
 
 Pearsons_Chi_squared<- function(attribute){
   count_instances<- table(stroke[[attribute]],stroke$stroke)
@@ -164,7 +158,7 @@ if(pearson_corelation_stroke$p.value<0.05){
   print("No significant relationship found.")
 }
 
-library(caret)
+
 
 set.seed(123)
 split_Index<- createDataPartition(stroke$stroke, p = 0.8, list = FALSE)
@@ -191,3 +185,4 @@ cat("Confusion Matrix: ",confusion_matrix,"\n")
 cat("Recall: ",recall_matrix_second_class,"\n")
 cat("Precision: ",precision_matrix_second_class,"\n")
 cat("f-measure: ",f_measure,"\n")
+
